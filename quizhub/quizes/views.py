@@ -20,6 +20,7 @@ def quiz_list(request):
 @permission_classes([IsAuthenticated])
 def quiz_create(request):
     serializer = QuizSerializer(data=request.data)
+    serializer.data['owner'] = request.user
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
