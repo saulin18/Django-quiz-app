@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,16 +9,14 @@ from .serializers import MyTokenObtainPairSerializer, RegisterUserSerializer
 
 # Create your views here.
 
-class RegisterView(generics.CreateAPIView):
-    serializer_class = RegisterUserSerializer
-    queryset = RegisterUser.objects.all()
-    
-    def post(self, request, *args, **kwargs):
-      serializer = self.get_serializer(data=request.data)
-      serializer.is_valid(raise_exception=True)
-      serializer.save()
-      return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+@api_view(['POST'])
+def register(request):
+    user = RegisterUser.objects.create_user(username=request.data['username'], password=request.data['password'])
+    serializer = RegisterUserSerializer(user, many=False)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class get_users(generics.ListAPIView):
     serializer_class = RegisterUserSerializer

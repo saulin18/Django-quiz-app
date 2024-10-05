@@ -7,6 +7,7 @@ class Quiz(models.Model):
     description = models.TextField(max_length=1000) 
     owner = models.ForeignKey(RegisterUser, on_delete=models.CASCADE, null=True, blank=True, related_name='quizzes')
     winner_solution = models.OneToOneField('Solution', null=True, blank=True, on_delete=models.SET_NULL, related_name='winning_quiz')
+    solutions = models.ManyToManyField('Solution', blank=True, related_name='solutions')
     class Meta:
        app_label = 'quizes' 
 

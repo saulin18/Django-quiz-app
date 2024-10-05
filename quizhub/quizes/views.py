@@ -1,43 +1,69 @@
-from rest_framework import permissions
+
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
-from rest_framework import generics
-from quizhub.quizes.models import Quiz  
-from .serializers import QuizSerializer 
+from quizhub.quizes.models import Quiz, Solution  
+from .serializers import QuizSerializer, SolutionSerializer 
 
 # Create your views here.
 
+@api_view(['GET'])
+def quiz_list(request):
+    quiz_list = Quiz.objects.all()
+    serializer = QuizSerializer(quiz_list, many=True)
+    return Response(serializer.data)
 
-class QuizListView(generics.ListAPIView):
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializer
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def quiz_create(request):
+    serializer = QuizSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     
-    def get_queryset(self):
-        return Quiz.objects.all()
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def quiz_winner_update(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
 
+    if quiz.owner != request.user:
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
-class QuizDetailView(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializer   
+    solution_id = request.data.get('solution_id')
+    if not solution_id:
+        return Response({'error': 'Missing solution_id'}, status=status.HTTP_400_BAD_REQUEST)
 
+    try:
+        solution = Solution.objects.get(pk=solution_id, quiz=quiz)
+    except Solution.DoesNotExist:
+        return Response({'error': 'Solution not found'}, status=status.HTTP_404_NOT_FOUND)
 
-class QuizCreateView(generics.CreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializer   
+    if quiz.winner_solution:  
+        quiz.winner_solution = solution
+    else:  
+        quiz.winner_solution = solution
+    quiz.save()
+
+    serializer = SolutionSerializer(solution)
+    return Response(serializer.data, status=status.HTTP_200_OK)
     
-
-class QuizUpdateView(generics.UpdateAPIView):
     
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Quiz.objects.all()
-    serializer_class = QuizSerializer
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_solution(request, pk):
+    quiz = Quiz.objects.get(pk=pk)
+    if quiz.owner == request.user:
+        return Response(status=status.HTTP_403_FORBIDDEN)
    
-    def put(self, request, *args, **kwargs):
-       serializer = self.get_serializer(data=request.data)
-       serializer.is_valid(raise_exception=True)
-       serializer.save()
-       return Response(serializer.data, status=status.HTTP_201_CREATED)
+    solution = Solution.objects.create(quiz=quiz, user=request.user, content=request.data['content'])
+    quiz.solutions.add(solution)
+    quiz.save()
+    return Response(status=status.HTTP_201_CREATED)
+   
     

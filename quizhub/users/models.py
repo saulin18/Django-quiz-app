@@ -8,6 +8,8 @@ class RegisterUser(AbstractBaseUser):
     password = models.CharField(max_length=100)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    USERNAME_FIELD = 'username'
+    
     
    
     
