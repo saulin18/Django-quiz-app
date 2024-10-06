@@ -4,7 +4,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from quizhub.quizes.models import Quiz, Solution  
+from quizhub.solutions.models import Solution
+from quizhub.quizes.models import Quiz
 from .serializers import QuizSerializer, SolutionSerializer 
 
 # Create your views here.
@@ -61,7 +62,8 @@ def create_solution(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     if quiz.owner == request.user:
         return Response(status=status.HTTP_403_FORBIDDEN)
-   
+    if Solution.objects.filter(quiz=quiz, user=request.user).exists():
+            return Response({"detail": "You cannot post another solution in this quiz."}, status=status.HTTP_403_FORBIDDEN)
     solution = Solution.objects.create(quiz=quiz, user=request.user, content=request.data['content'])
     quiz.solutions.add(solution)
     quiz.save()
