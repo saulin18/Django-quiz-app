@@ -7,12 +7,9 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 class RegisterUserSerializer(serializers.ModelSerializer):    
     class Meta:
       model = RegisterUser
-      fields = ['username', 'is_admin', 'is_active']
+      fields = ['username', 'is_admin', 'is_active, password']
       REQUIRED_FIELDS = ['username', 'password']
-      extra_kwargs = {
-        'password': {'write_only': True},
-        'Quiz': {'read_only': True},
-      }
+      
     
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
