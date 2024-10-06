@@ -39,6 +39,7 @@ REST_FRAMEWORK = {
 # Application definition
 
 INSTALLED_APPS = [
+    'quizhub.solutions',
     'quizhub.users',
     'quizhub.quizes',
     'rest_framework',

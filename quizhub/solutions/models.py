@@ -4,8 +4,8 @@ from quizhub.users.models import RegisterUser
 # Create your models here.
 
 class Solution(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='solution')
-    user = models.ForeignKey(RegisterUser, on_delete=models.CASCADE, related_name='solutions')
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE,  related_name='quizes_solutions')
+    user = models.ForeignKey(RegisterUser, on_delete=models.CASCADE, related_name='quizes_solutions_user')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -13,4 +13,6 @@ class Solution(models.Model):
         unique_together = ('quiz', 'user')  
 
     def __str__(self):
-        return f'Solution by {self.user.username} for {self.quiz.title}'       
+        return f'Solution by {self.user.username} for {self.quiz.title}'   
+    
+    app_label = 'solutions'
