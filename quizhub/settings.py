@@ -38,7 +38,27 @@ REST_FRAMEWORK = {
  
 # Application definition
 
+
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+)
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "https://quiz-hub.vercel.app",
+    "https://web-production-be9de.up.railway.app",
+    "https://quiz-hub-production-be9de.up.railway.app",
+    "http://127.0.0.1:3000",
+    
+]
+
 INSTALLED_APPS = [
+    'corsheaders',
     'quizhub.solutions',
     'quizhub.users',
     'quizhub.quizes',
@@ -60,6 +80,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = 'quizhub.urls'
