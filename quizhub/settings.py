@@ -54,6 +54,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://web-production-be9de.up.railway.app",
     "https://quiz-hub-production-be9de.up.railway.app",
     "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://localhost:5173/",
+    "http://localhost:5173/auth/register",
+    "http://localhost:5173/auth/login",
+    ""
+    
     
 ]
 
