@@ -6,7 +6,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from quizhub.solutions.models import Solution
 from quizhub.quizes.models import Quiz
-from .serializers import QuizSerializer, SolutionSerializer 
+from .serializers import QuizSerializer
+from quizhub.solutions.serializers import SolutionSerializer
 
 # Create your views here.
 
@@ -22,6 +23,7 @@ def quiz_list(request):
 def quiz_create(request):
     serializer = QuizSerializer(data=request.data)
     serializer.data['owner'] = request.user
+    serializer.data['solutions'] = []
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
