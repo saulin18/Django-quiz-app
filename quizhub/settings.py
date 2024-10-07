@@ -58,11 +58,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://web-production-be9de.up.railway.app",
-    "https://localhost:5173/",
-    "https://localhost:5173/quizes/",
-    "https://django-quiz-app-production.up.railway.app/",
-    "https://localhost:5173/quizes/create/",
-    
+    "https://localhost:5173",
+    "https://django-quiz-app-production.up.railway.app",
 ]
 
 INSTALLED_APPS = [
