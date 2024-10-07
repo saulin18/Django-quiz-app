@@ -53,16 +53,8 @@ CORS_ALLOW_METHODS = (
     "PUT",
 )
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://quiz-hub.vercel.app",
-    "https://web-production-be9de.up.railway.app",
-    "https://quiz-hub-production-be9de.up.railway.app",
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
-    "http://localhost:5173"
-     
-]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 INSTALLED_APPS = [
     'corsheaders',
