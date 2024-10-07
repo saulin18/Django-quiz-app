@@ -22,7 +22,7 @@ class RegisterUser(AbstractUser):
     
     groups = models.ManyToManyField(
         Group,
-        related_name='custom_user_set',  # Change this to something unique
+        related_name='custom_users_register',
         blank=True,
         help_text='The groups this user belongs to. A user will get all permissions '
                   'granted to each of their groups.',
@@ -31,7 +31,7 @@ class RegisterUser(AbstractUser):
     
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='custom_user_set',  # Change this to something unique
+        related_name='custom_users_permissions_register',
         blank=True,
         help_text='Specific permissions for this user.',
         verbose_name='user permissions',
