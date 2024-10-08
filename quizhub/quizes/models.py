@@ -7,7 +7,7 @@ class Quiz(models.Model):
     description = models.TextField(max_length=1000) 
     owner = models.ForeignKey(RegisterUser, on_delete=models.CASCADE, null=True, blank=True, related_name='quizzes')
     winner_solution = models.OneToOneField('Solution', null=True, blank=True, on_delete=models.SET_NULL, related_name='winning_quiz')
-    solutions = models.ManyToManyField('Solution', blank=True, null=True, related_name='solutions')
+    solutions = models.ManyToManyField('Solution', blank=True, null=True, related_name='solutions_quiz')
     class Meta:
        app_label = 'quizes' 
 
@@ -18,8 +18,8 @@ class Quiz(models.Model):
         
 
 class Solution(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='solution')
-    user = models.ForeignKey(RegisterUser, on_delete=models.CASCADE, related_name='solutions')
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='quiz_solution')
+    user = models.ForeignKey(RegisterUser, on_delete=models.CASCADE, related_name='solution_owner')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
