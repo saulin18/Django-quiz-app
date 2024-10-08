@@ -124,7 +124,7 @@ DATABASES = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), # Set your desired access token duration
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30), # Set your desired access token duration
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1), # Set your desired refresh token duration
     'ROTATE_REFRESH_TOKENS': False,
     'ALGORITHM': 'HS256', # Default algorithm
