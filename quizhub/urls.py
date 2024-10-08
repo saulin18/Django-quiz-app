@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('quizes/', include('quizhub.quizes.urls')),
     path('', include('quizhub.users.urls')),
-    path('/quizes/', include('quizhub.solutions.urls')),
+    path('', include('quizhub.solutions.urls')),
 ]

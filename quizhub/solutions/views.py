@@ -1,4 +1,8 @@
-
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from quizhub.quizes.models import Quiz, Solution
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # Create your views here.
@@ -37,11 +41,7 @@ def create_solution(request, pk):
     quiz.solutions.add(solution)
     quiz.save() 
     
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework import status
-from quizhub.quizes.models import Quiz, Solution
+
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
