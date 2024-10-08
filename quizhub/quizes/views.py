@@ -22,12 +22,12 @@ def quiz_list(request):
 @permission_classes([IsAuthenticated])
 def quiz_create(request):
     serializer = QuizSerializer(data=request.data)
-    serializer.data['owner'] = request.user
-    serializer.data['solutions'] = []
     if serializer.is_valid():
-        serializer.save()
+        quiz = serializer.save(owner=request.user, solutions=[])
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
     
