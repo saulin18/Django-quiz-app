@@ -52,7 +52,7 @@ CORS_ALLOW_METHODS = (
     "POST",
     "PUT",
 )
-
+CORS_ALLOW_CREDENTIALS = True   
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -60,6 +60,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://web-production-be9de.up.railway.app",
     "http://localhost:5173",
     "https://django-quiz-app-production.up.railway.app",
+    "https://localhost:5173",
 ]
 
 INSTALLED_APPS = [
