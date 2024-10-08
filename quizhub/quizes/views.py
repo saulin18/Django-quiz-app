@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 
-from quizhub.solutions.models import Solution
+from quizhub.quizes.models import Solution
 from quizhub.quizes.models import Quiz
 from .serializers import QuizSerializer
 from quizhub.solutions.serializers import SolutionSerializer

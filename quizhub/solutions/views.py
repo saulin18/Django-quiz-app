@@ -1,10 +1,9 @@
-from django.shortcuts import render
+
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.decorators import api_view
 # Create your views here.
-from quizhub.solutions.models import Solution
-from quizhub.quizes.models import Quiz
+
+from quizhub.quizes.models import Quiz, Solution
 from .serializers import SolutionSerializer
 
 @api_view(['GET'])

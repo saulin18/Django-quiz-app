@@ -1,4 +1,4 @@
-from .models import Solution
+from quizhub.quizes.models import Solution
 from rest_framework import serializers
 
 class SolutionSerializer(serializers.ModelSerializer):
