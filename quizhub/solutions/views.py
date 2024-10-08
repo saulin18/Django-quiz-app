@@ -40,7 +40,7 @@ def create_solution(request, pk):
     solution = Solution.objects.create(quiz=quiz, user=request.user, content=content)
     quiz.solutions.add(solution)
     quiz.save() 
-    
+    return Response({"detail": "Solución creada exitosamente."}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['DELETE'])
