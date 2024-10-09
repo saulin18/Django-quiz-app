@@ -54,10 +54,16 @@ def delete_solution(request, pk):
 
     quiz = solution.quiz 
 
-   
     if solution.user != request.user:
         return Response({"detail": "No puedes eliminar esta solución."}, status=status.HTTP_403_FORBIDDEN)
+
     solution.delete()
+    quiz.solutions.remove(solution)
+    quiz.save()
+    
     if Solution.objects.filter(quiz=quiz, user=request.user).exists():
-        return Response({"detail": "Solución eliminada. No puedes publicar otra solución en este quiz."}, status=status.HTTP_200_OK)
+        return Response({"detail": "Solución eliminada. No puedes publicar otra solución en este quiz."}, status=status.HTTP_403_FORBIDDEN)
+    
+    return Response({"detail": "Solución eliminada."}, status=status.HTTP_204_NO_CONTENT)
+
    
