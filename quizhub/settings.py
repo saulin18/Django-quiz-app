@@ -61,6 +61,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://django-quiz-app-production.up.railway.app",
     "https://localhost:5173",
+    "https://quizes-hub-frontend-react-p67d.vercel.app"
 ]
 
 INSTALLED_APPS = [
