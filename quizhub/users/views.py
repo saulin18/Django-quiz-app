@@ -19,6 +19,8 @@ def register(request):
   if not username or not password:
     return Response({'error': 'Username and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
+  if CustomUser.objects.filter(username=username).exists():
+    return Response({'error': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
   user = CustomUser.objects.create_user(username=username, password=password)
 
   refresh = RefreshToken.for_user(user)
