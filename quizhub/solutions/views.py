@@ -46,9 +46,9 @@ def create_solution(request, pk):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def delete_solution(request, solution_id):
+def delete_solution(request, pk):
     try:
-        solution = Solution.objects.get(pk=solution_id)
+        solution = Solution.objects.get(pk=pk)
     except Solution.DoesNotExist:
         return Response({"detail": "Solución no encontrada."}, status=status.HTTP_404_NOT_FOUND)
 
