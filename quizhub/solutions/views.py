@@ -7,11 +7,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 # Create your views here.
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from quizhub.quizes.models import Quiz, Solution
 from .serializers import SolutionSerializer
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_solutions(request, pk):
 
    quiz = Quiz.objects.get(pk=pk)
