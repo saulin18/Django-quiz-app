@@ -19,51 +19,65 @@ def get_solutions(request, pk):
    solutions = Solution.objects.filter(quiz=quiz)
    serializer = SolutionSerializer(solutions, many=True)
    return Response(serializer.data)
-   
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_solution(request, pk):
-    try:
-        quiz = Quiz.objects.get(pk=pk)
-    except Quiz.DoesNotExist:
-        return Response({"detail": "Quiz no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+  try:
+    quiz = Quiz.objects.get(pk=pk)
+  except Quiz.DoesNotExist:
+    return Response({"error": "Quiz no encontrado."}, status=status.HTTP_404_NOT_FOUND)
 
+  try:
     if quiz.owner == request.user:
-        return Response({"detail": "No puedes agregar una solución a tu propio quiz."}, status=status.HTTP_403_FORBIDDEN)
+      raise ValueError("No puedes agregar una solución a tu propio quiz.")
 
     if Solution.objects.filter(quiz=quiz, user=request.user).exists():
-        return Response({"detail": "No puedes publicar otra solución en este quiz."}, status=status.HTTP_403_FORBIDDEN)
+      raise ValueError("No puedes publicar otra solución en este quiz.")
 
     content = request.data.get('content')
     if not content:
-        return Response({"detail": "El contenido es obligatorio."}, status=status.HTTP_400_BAD_REQUEST)
+      raise ValueError("El contenido es obligatorio.")
 
     solution = Solution.objects.create(quiz=quiz, user=request.user, content=content)
     quiz.solutions.add(solution)
-    quiz.save() 
+    quiz.save()
     return Response({"detail": "Solución creada exitosamente."}, status=status.HTTP_201_CREATED)
+
+  except ValueError as e:
+    return Response({"error": str(e)}, status=status.HTTP_403_FORBIDDEN)
+  except Exception as e:
+    return Response({"error": "Ha ocurrido un error interno"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_solution(request, pk):
-    try:
-        solution = Solution.objects.get(pk=pk)
-    except Solution.DoesNotExist:
-        return Response({"detail": "Solución no encontrada."}, status=status.HTTP_404_NOT_FOUND)
+  try:
+    solution = Solution.objects.get(pk=pk)
+  except Solution.DoesNotExist:
+    return Response({"error": "Solución no encontrada."}, status=status.HTTP_404_NOT_FOUND)
 
-    quiz = solution.quiz 
+  quiz = solution.quiz
 
+  try:
     if solution.user != request.user:
-        return Response({"detail": "No puedes eliminar esta solución."}, status=status.HTTP_403_FORBIDDEN)
+      raise ValueError("No puedes eliminar esta solución, no eres el creador de la misma.")
 
     solution.delete()
     quiz.solutions.remove(solution)
     quiz.save()
-    
+
     if Solution.objects.filter(quiz=quiz, user=request.user).exists():
-        return Response({"detail": "Solución eliminada. No puedes publicar otra solución en este quiz."}, status=status.HTTP_403_FORBIDDEN)
-    
+      raise ValueError("Solución eliminada. No puedes publicar otra solución en este quiz.")
+
     return Response({"detail": "Solución eliminada."}, status=status.HTTP_204_NO_CONTENT)
+
+  except ValueError as e:
+    return Response({"error": str(e)}, status=status.HTTP_403_FORBIDDEN)
+  except Exception as e:
+    return Response({"error": "Ha ocurrido un error interno"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
    

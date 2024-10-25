@@ -29,15 +29,13 @@ def quiz_create(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-    
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def quiz_winner_update(request, pk):
     quiz = Quiz.objects.get(pk=pk)
 
     if quiz.owner != request.user:
-        return Response(status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': 'You are not the owner of this quiz'},status=status.HTTP_403_FORBIDDEN)
 
     solution_id = request.data.get('solution_id')
     if not solution_id:
